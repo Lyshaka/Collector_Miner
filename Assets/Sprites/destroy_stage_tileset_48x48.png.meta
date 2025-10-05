@@ -1,0 +1,446 @@
+fileFormatVersion: 2
+guid: be9a0b44e690d4842b6bf4b195079aad
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4989245741971327791
+    second: destroy_stage_tileset_48x48_0
+  - first:
+      213: 6923919530254169564
+    second: destroy_stage_tileset_48x48_1
+  - first:
+      213: -1477587706528721621
+    second: destroy_stage_tileset_48x48_2
+  - first:
+      213: 7583480971775930072
+    second: destroy_stage_tileset_48x48_3
+  - first:
+      213: 1513631300511097003
+    second: destroy_stage_tileset_48x48_4
+  - first:
+      213: -162599328373177288
+    second: destroy_stage_tileset_48x48_5
+  - first:
+      213: 7301114913416053083
+    second: destroy_stage_tileset_48x48_6
+  - first:
+      213: 1386868344560970468
+    second: destroy_stage_tileset_48x48_7
+  - first:
+      213: -548206396014754995
+    second: destroy_stage_tileset_48x48_8
+  - first:
+      213: -8212981828123071234
+    second: destroy_stage_tileset_48x48_9
+  - first:
+      213: -8926177186269131109
+    second: destroy_stage_tileset_48x48_10
+  - first:
+      213: -3873659054536581984
+    second: destroy_stage_tileset_48x48_11
+  - first:
+      213: -9217580752536073692
+    second: destroy_stage_tileset_48x48_12
+  - first:
+      213: 4591617188497630449
+    second: destroy_stage_tileset_48x48_13
+  - first:
+      213: 5480741471220785648
+    second: destroy_stage_tileset_48x48_14
+  - first:
+      213: 2132125168883416071
+    second: destroy_stage_tileset_48x48_15
+  - first:
+      213: -2245919592484321212
+    second: destroy_stage_tileset_48x48_16
+  - first:
+      213: 9080519447271676368
+    second: destroy_stage_tileset_48x48_17
+  - first:
+      213: -1832992121161872508
+    second: destroy_stage_tileset_48x48_18
+  - first:
+      213: -2776062450660603408
+    second: destroy_stage_tileset_48x48_19
+  - first:
+      213: -6896167344971519345
+    second: destroy_stage_tileset_48x48_20
+  - first:
+      213: -4090621916132746260
+    second: destroy_stage_tileset_48x48_21
+  - first:
+      213: -2011460698699120623
+    second: destroy_stage_tileset_48x48_22
+  - first:
+      213: 384072561528933376
+    second: destroy_stage_tileset_48x48_23
+  - first:
+      213: -9037013359452005655
+    second: destroy_stage_tileset_48x48_24
+  - first:
+      213: -3674429390272834614
+    second: destroy_stage_tileset_48x48_25
+  - first:
+      213: -7364808137008411345
+    second: destroy_stage_tileset_48x48_26
+  - first:
+      213: -6921547049622305878
+    second: destroy_stage_tileset_48x48_27
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 48
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d43bac8e63a2cab0800000000000000
+      internalID: -4989245741971327791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd57036d024b61060800000000000000
+      internalID: 6923919530254169564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b251fdb3fcd8e7be0800000000000000
+      internalID: -1477587706528721621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_3
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8de63abc3cfed3960800000000000000
+      internalID: 7583480971775930072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_4
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba060e3f5af710510800000000000000
+      internalID: 1513631300511097003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8348997b5c45ebdf0800000000000000
+      internalID: -162599328373177288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_6
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b51887ea455c25560800000000000000
+      internalID: 7301114913416053083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_7
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea6ac359652f3310800000000000000
+      internalID: 1386868344560970468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_8
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4381f5ff216468f0800000000000000
+      internalID: -548206396014754995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: destroy_stage_tileset_48x48_9
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efc6cf3aa80a50e80800000000000000
+      internalID: -8212981828123071234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: c0fd0a78cdfd8af4e89fbb515b2ae539
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":48.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      destroy_stage_tileset_48x48_0: -4989245741971327791
+      destroy_stage_tileset_48x48_1: 6923919530254169564
+      destroy_stage_tileset_48x48_2: -1477587706528721621
+      destroy_stage_tileset_48x48_3: 7583480971775930072
+      destroy_stage_tileset_48x48_4: 1513631300511097003
+      destroy_stage_tileset_48x48_5: -162599328373177288
+      destroy_stage_tileset_48x48_6: 7301114913416053083
+      destroy_stage_tileset_48x48_7: 1386868344560970468
+      destroy_stage_tileset_48x48_8: -548206396014754995
+      destroy_stage_tileset_48x48_9: -8212981828123071234
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

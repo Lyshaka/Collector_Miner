@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ede71f7aecd2414b9f97aa3e8e6b92e, type: 3}
+  m_Name: Iron
+  m_EditorClassIdentifier: Assembly-CSharp::SO_Ore
+  oreName: Iron
+  color: {r: 0.5320754, g: 0.48286548, b: 0.41662508, a: 1}
+  maxVeinPerChunk: 1
+  veinSize: {x: 1, y: 1}
+  hardness: 1
+  poorQuantity: 1
+  mediumQuantity: 2
+  richQuantity: 3
+  poorTiles:
+  - {fileID: 11400000, guid: 66f42f67bee5cc748818f23541df6fd6, type: 2}
+  - {fileID: 11400000, guid: 6b50e36b8cd751c428d64a6e33041707, type: 2}
+  mediumTiles:
+  - {fileID: 11400000, guid: 0137550717a93a546ae3ac7b3881b367, type: 2}
+  - {fileID: 11400000, guid: 5ddef3657f205d14dbb9bee805adc17b, type: 2}
+  richTiles:
+  - {fileID: 11400000, guid: 501bc635fe9fc5344a7d046ea92aab7e, type: 2}
+  - {fileID: 11400000, guid: 6f96eb32f3628e54ca030d2e6d41a3f4, type: 2}
+  oreSprite: {fileID: 21300000, guid: db0367742c6082a44a6337833d9f712f, type: 3}

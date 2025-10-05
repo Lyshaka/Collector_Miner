@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ede71f7aecd2414b9f97aa3e8e6b92e, type: 3}
+  m_Name: Copper
+  m_EditorClassIdentifier: Assembly-CSharp::SO_Ore
+  oreName: Copper
+  color: {r: 0.86415094, g: 0.6561546, b: 0.38316125, a: 1}
+  maxVeinPerChunk: 4
+  veinSize: {x: 3, y: 8}
+  hardness: 1
+  poorQuantity: 1
+  mediumQuantity: 2
+  richQuantity: 3
+  poorTiles:
+  - {fileID: 11400000, guid: 3f4c3234ddf42564491d5679fa9e2b4a, type: 2}
+  - {fileID: 11400000, guid: 785a28d037e50c84d98c9084ee809b96, type: 2}
+  mediumTiles:
+  - {fileID: 11400000, guid: a957484b3ed67434498d4afc9fc5671a, type: 2}
+  - {fileID: 11400000, guid: 20a626ad5e6fecd409406fccc41bd772, type: 2}
+  richTiles:
+  - {fileID: 11400000, guid: a604c15ca7290e04eb5b7b322cc0a552, type: 2}
+  - {fileID: 11400000, guid: 7f6eb5529b77b174ba025acc61030db2, type: 2}
+  oreSprite: {fileID: 21300000, guid: 1de8273687e566f4e94c826eef0d7078, type: 3}

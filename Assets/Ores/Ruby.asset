@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ede71f7aecd2414b9f97aa3e8e6b92e, type: 3}
+  m_Name: Ruby
+  m_EditorClassIdentifier: Assembly-CSharp::SO_Ore
+  oreName: Ruby
+  color: {r: 0.79622644, g: 0.022534575, b: 0.022534575, a: 1}
+  maxVeinPerChunk: 1
+  veinSize: {x: 1, y: 1}
+  hardness: 1
+  poorQuantity: 1
+  mediumQuantity: 2
+  richQuantity: 3
+  poorTiles:
+  - {fileID: 11400000, guid: 7799598ebff2cac44b3a24df13b51b6d, type: 2}
+  - {fileID: 11400000, guid: fc044172eb8f0c74dabf21d629d3c7f7, type: 2}
+  mediumTiles:
+  - {fileID: 11400000, guid: 485622eb92464944d8f1a439c7f2ec85, type: 2}
+  - {fileID: 11400000, guid: 35abd29cd3c06944c9bc402957d1f71f, type: 2}
+  richTiles:
+  - {fileID: 11400000, guid: aa452f1b280114f47be8aceb15577ca7, type: 2}
+  - {fileID: 11400000, guid: 9ee24203199c2d44a969d991de935819, type: 2}
+  oreSprite: {fileID: 21300000, guid: 4a95bb3ac7c2c3c4994a412bff29410d, type: 3}

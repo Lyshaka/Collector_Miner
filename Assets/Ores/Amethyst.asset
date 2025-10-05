@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ede71f7aecd2414b9f97aa3e8e6b92e, type: 3}
+  m_Name: Amethyst
+  m_EditorClassIdentifier: Assembly-CSharp::SO_Ore
+  oreName: Amethyst
+  color: {r: 0.62122804, g: 0.389854, b: 0.8792453, a: 1}
+  maxVeinPerChunk: 3
+  veinSize: {x: 2, y: 5}
+  hardness: 25
+  poorQuantity: 1
+  mediumQuantity: 2
+  richQuantity: 3
+  poorTiles:
+  - {fileID: 11400000, guid: c50cb57fe22ee6942a12d80de5df72a0, type: 2}
+  - {fileID: 11400000, guid: 6e416d10846069a468b78a66b629c8ef, type: 2}
+  mediumTiles:
+  - {fileID: 11400000, guid: 6e6cf7a13ff736242bd532f407adb1f2, type: 2}
+  - {fileID: 11400000, guid: 7914451654735e341b9cc1c3f36aa223, type: 2}
+  richTiles:
+  - {fileID: 11400000, guid: a0fadd97f19f4f540aca3d4a1d60da78, type: 2}
+  - {fileID: 11400000, guid: 1625de132cac7804ca75b3a66e7750df, type: 2}
+  oreSprite: {fileID: 21300000, guid: 8293e51caa0258345a234a32bfd49503, type: 3}

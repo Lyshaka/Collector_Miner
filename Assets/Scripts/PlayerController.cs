@@ -1,0 +1,136 @@
+using Sirenix.OdinInspector;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class PlayerController : MonoBehaviour
+{
+	public static PlayerController instance;
+
+	[Title("Properties")]
+	[SerializeField] float moveSpeed;
+	[SerializeField] float miningSpeed = 1f;
+	[SerializeField] int miningStrength = 1;
+	[SerializeField] float fogRadius = 5f;
+
+	[Title("References")]
+	[SerializeField] PlayerMining playerMining;
+	[SerializeField] Rigidbody2D rb;
+	[SerializeField] Animator animator;
+	[SerializeField] Tilemap fogTilemap;
+	[SerializeField] Tilemap layoutTilemap;
+
+	bool _isMining = false;
+	Vector2 lookDirection = Vector2.down;
+
+	public bool canInput = true;
+
+	private void OnEnable()
+	{
+		instance = this;
+		playerMining.OnMine += MineBlock;
+	}
+
+	private void OnDisable()
+	{
+		playerMining.OnMine -= MineBlock;
+	}
+
+	private void FixedUpdate()
+	{
+		HandleMove();
+	}
+
+	private void Update()
+	{
+		HandleMining();
+
+		CarveFog();
+	}
+
+	void HandleMove()
+	{
+		if (!canInput)
+		{
+			rb.linearVelocity = Vector2.zero;
+			animator.SetBool("Moving", false);
+			return;
+		}
+
+		Vector2 inputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+
+		animator.SetBool("Moving", rb.linearVelocity.sqrMagnitude > 0);
+
+		rb.linearVelocity = inputMove * moveSpeed;
+
+		if (inputMove.sqrMagnitude > 0)
+			lookDirection = ClampToCardinal(inputMove);
+
+		animator.SetFloat("DirectionX", lookDirection.x);
+		animator.SetFloat("DirectionY", lookDirection.y);
+	}
+
+	void MineBlock()
+	{
+		Vector2Int miningPos = (Vector2Int)layoutTilemap.WorldToCell(transform.position + (Vector3)lookDirection * 0.6f);
+
+		MapManager.instance.MineTile(miningPos, miningStrength);
+	}
+
+	void HandleMining()
+	{
+		if (!canInput)
+		{
+			_isMining = false;
+			animator.SetBool("Mining", _isMining);
+			return;
+		}
+
+		_isMining = Input.GetButton("Fire1");
+		animator.SetBool("Mining", _isMining);
+		animator.SetFloat("MiningSpeed", miningSpeed);
+	}
+
+	void CarveFog()
+	{
+		for (int x = -Mathf.CeilToInt(fogRadius); x <= Mathf.CeilToInt(fogRadius); x++)
+		{
+			for (int y = -Mathf.CeilToInt(fogRadius); y <= Mathf.CeilToInt(fogRadius); y++)
+			{
+				if (x * x + y * y <= fogRadius * fogRadius)
+				{
+					Vector3Int playerCell = fogTilemap.WorldToCell(transform.position);
+					Vector3Int cellPos = new(playerCell.x + x, playerCell.y + y, 0);
+					fogTilemap.SetTile(cellPos, null); // remove fog
+				}
+			}
+		}
+	}
+
+	Vector2 ClampToCardinal(Vector2 dir)
+	{
+		// Handle zero vector safely
+		if (dir == Vector2.zero)
+			return Vector2.zero;
+
+		// Compare absolute x and y to find which axis dominates
+		if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+		{
+			// Horizontal direction dominates
+			return dir.x > 0 ? Vector2.right : Vector2.left;
+		}
+		else
+		{
+			// Vertical direction dominates
+			return dir.y > 0 ? Vector2.up : Vector2.down;
+		}
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawWireSphere(transform.position, fogRadius);
+
+		Gizmos.color = Color.blue;
+		Gizmos.DrawWireSphere(layoutTilemap.WorldToCell(transform.position + (Vector3)lookDirection * 0.6f) + layoutTilemap.tileAnchor, 0.5f);
+	}
+}
