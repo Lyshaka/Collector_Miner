@@ -71,6 +71,9 @@ public class PlayerController : MonoBehaviour
 
 	void MineBlock()
 	{
+		if (MapManager.instance == null)
+			return;
+
 		Vector2Int miningPos = (Vector2Int)layoutTilemap.WorldToCell(transform.position + (Vector3)lookDirection * 0.6f);
 
 		MapManager.instance.MineTile(miningPos, miningStrength);
@@ -92,6 +95,9 @@ public class PlayerController : MonoBehaviour
 
 	void CarveFog()
 	{
+		if (fogTilemap == null)
+			return;
+
 		for (int x = -Mathf.CeilToInt(fogRadius); x <= Mathf.CeilToInt(fogRadius); x++)
 		{
 			for (int y = -Mathf.CeilToInt(fogRadius); y <= Mathf.CeilToInt(fogRadius); y++)

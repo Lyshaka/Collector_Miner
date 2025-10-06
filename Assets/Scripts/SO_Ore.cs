@@ -10,6 +10,7 @@ public class SO_Ore : ScriptableObject
 	public Color color = Color.white;
 	[Tooltip("Number of veins per chunk"), Range(1, 20)] public int maxVeinPerChunk = 1;
 	[Tooltip("Number of ore per vein"), MinMaxSlider(1, 16)] public Vector2Int veinSize = new(1, 1);
+	public int price = 1;
 	public int weight = 1;
 	public int health = 1;
 	public int hardness = 1;

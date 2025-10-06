@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class GameManager : MonoBehaviour
 
 	[Title("Light")]
 	[SerializeField] PlayerLightManager lightManager;
-	[SerializeField, Tooltip("Duration in seconds")] float lightDuration = 60;
+	[SerializeField, Tooltip("Duration in seconds")] float lightDuration = 60f;
 	[SerializeField] AnimationCurve lightShakyness;
 
 	public Action<float> OnAddItem;
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
 	Dictionary<string, int> inventory = new();
 
 	float currentLightState = 0f;
+
+	bool isSceneLoading = false;
 
 	private void OnEnable()
 	{
@@ -38,6 +41,9 @@ public class GameManager : MonoBehaviour
 
 	void UpdateLight()
 	{
+		if (lightManager == null)
+			return;
+
 		currentLightState -= Time.deltaTime;
 
 		OnLightUpdate?.Invoke(currentLightState / lightDuration);
@@ -63,6 +69,12 @@ public class GameManager : MonoBehaviour
 		OnAddItem?.Invoke((float)currentWeight / capacity);
 	}
 
+	public void LoadScene(string sceneName)
+	{
+		if (!isSceneLoading)
+			StartCoroutine(LoadSceneAsync(sceneName));
+	}
+
 	IEnumerator KillSequence()
 	{
 		PlayerController.instance.canInput = false;
@@ -76,5 +88,29 @@ public class GameManager : MonoBehaviour
 			elapsedTime += Time.deltaTime;
 			yield return null;
 		}
+	}
+
+	IEnumerator LoadSceneAsync(string name)
+	{
+		isSceneLoading = true;
+
+		AsyncOperation loadingSceneAO = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+		loadingSceneAO.allowSceneActivation = false;
+
+
+		while (loadingSceneAO.progress < 0.9f)
+		{
+			Debug.Log("Scene Loading");
+			yield return null;
+		}
+
+
+		Scene sceneToLoad = SceneManager.GetSceneByPath(name);
+		Scene currentScene = SceneManager.GetActiveScene();
+		loadingSceneAO.allowSceneActivation = true;
+		SceneManager.UnloadSceneAsync(currentScene);
+		SceneManager.SetActiveScene(sceneToLoad);
+
+		isSceneLoading = false;
 	}
 }
