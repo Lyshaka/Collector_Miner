@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
@@ -12,6 +13,14 @@ public class PlayerController : MonoBehaviour
 	public float miningSpeed = 1f;
 	public int miningStrength = 1;
 	[SerializeField] float fogRadius = 5f;
+
+	[Title("Audio")]
+	[SerializeField] AudioSource audioSource;
+	[SerializeField] AudioClip blockBreakSFX;
+	[SerializeField] AudioClip blockBounceSFX;
+	[SerializeField] AudioClip swishSFX;
+	[SerializeField] AudioClip pebbleSFX;
+
 
 	[Title("References")]
 	[SerializeField] PlayerMining playerMining;
@@ -53,6 +62,26 @@ public class PlayerController : MonoBehaviour
 		rb.linearVelocity = Vector2.zero;
 	}
 
+	public void PlaySFXBounce()
+	{
+		audioSource.PlayOneShot(blockBounceSFX);
+	}
+
+	public void PlaySFXBreak()
+	{
+		audioSource.PlayOneShot(blockBreakSFX);
+	}
+
+	public void PlaySFXSwish()
+	{
+		audioSource.PlayOneShot(swishSFX);
+	}
+
+	public void PlaySFXPebble()
+	{
+		audioSource.PlayOneShot(pebbleSFX);
+	}
+
 	public void Knockback()
 	{
 		StartCoroutine(BlockInputForSeconds(0.5f));
@@ -83,7 +112,10 @@ public class PlayerController : MonoBehaviour
 	void MineBlock()
 	{
 		if (MapManager.instance == null)
+		{
+			PlaySFXSwish();
 			return;
+		}
 
 		Vector2Int miningPos = (Vector2Int)layoutTilemap.WorldToCell(transform.position + (Vector3)lookDirection * 0.6f);
 

@@ -136,11 +136,15 @@ public class MapManager : MonoBehaviour
 	{
 		// If there is no tile, nothing happen
 		if (!layoutTilemap.HasTile((Vector3Int)tilePos))
+		{
+			PlayerController.instance.PlaySFXSwish();
 			return;
+		}
 
 		// If it's a tile from the start area nothing happen
 		if (startBounds.Contains((Vector3Int)tilePos))
 		{
+			PlayerController.instance.PlaySFXBounce();
 			PlayerController.instance.Knockback();
 			return;
 		}
@@ -181,6 +185,7 @@ public class MapManager : MonoBehaviour
 			// If we don't have enough strength, knockack and nope
 			if (strength < currentlyMinedTile.tileData.oreSO.hardness)
 			{
+				PlayerController.instance.PlaySFXBounce();
 				PlayerController.instance.Knockback();
 				return;
 			}
@@ -217,6 +222,7 @@ public class MapManager : MonoBehaviour
 
 	public void DestroyTile(Vector2Int tilePos)
 	{
+		PlayerController.instance.PlaySFXBreak();
 		currentlyMinedTile = null;
 		breakingTileRenderer.enabled = false;
 		breakingTileAnimator.Play("TileBreaking", 0, 0f);

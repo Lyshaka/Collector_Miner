@@ -456,9 +456,11 @@ public class GameManager : MonoBehaviour
 		return total;
 	}
 
-	public void SellAll()
+	public bool SellAll()
 	{
-		money += GetTotalValueOfInventory();
+		int amount = GetTotalValueOfInventory();
+		bool hasAnything = amount > 0;
+		money += amount;
 		dataSaved.money = money;
 		OnMoneyUpdate?.Invoke(money);
 
@@ -467,6 +469,8 @@ public class GameManager : MonoBehaviour
 		ClearInventory();
 		currentWeight = 0;
 		OnUpdateItem?.Invoke((float)currentWeight / capacity);
+
+		return hasAnything;
 	}
 
 	public SO_Ore GetSOByName(string name)

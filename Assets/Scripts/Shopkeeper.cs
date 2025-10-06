@@ -12,6 +12,11 @@ public class Shopkeeper : MonoBehaviour
 	[SerializeField] GameObject inventorySlotPrefab;
 	[SerializeField] TextMeshProUGUI totalTMP;
 
+	[Title("Audio")]
+	[SerializeField] AudioSource audioSource;
+	[SerializeField] AudioClip cashOutSFX;
+	[SerializeField] AudioClip tickSFX;
+
 	[Title("Upgrades References")]
 	[SerializeField] Color defaultTextColor = Color.white;
 	[SerializeField] Color cantAffordColor = Color.white;
@@ -52,13 +57,17 @@ public class Shopkeeper : MonoBehaviour
 
 	public void CloseShop()
 	{
+		audioSource.PlayOneShot(tickSFX);
 		shopCanvas.SetActive(false);
 		PlayerController.instance.canInput = true;
 	}
 
 	public void Sell()
 	{
-		GameManager.instance.SellAll();
+		audioSource.PlayOneShot(tickSFX);
+
+		if (GameManager.instance.SellAll())
+			audioSource.PlayOneShot(cashOutSFX);
 
 		UpdateShop();
 	}
@@ -89,6 +98,8 @@ public class Shopkeeper : MonoBehaviour
 	public void UpgradeButton(GameManager.DataSaved.Type type)
 	{
 		int cost = GameManager.instance.GetCostFromType(type);
+
+		audioSource.PlayOneShot(tickSFX);
 
 		if (!GameManager.instance.CanAfford(cost) || !GameManager.instance.CanUpgrade(type))
 			return;

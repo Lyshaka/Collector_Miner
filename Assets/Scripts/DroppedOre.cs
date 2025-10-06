@@ -69,6 +69,7 @@ public class DroppedOre : MonoBehaviour
 
 		if (GameManager.instance.HasCapacityFor(oreSO.weight))
 		{
+			PlayerController.instance.PlaySFXPebble();
 			GameManager.instance.AddItem(oreSO.name, oreSO.weight);
 			Destroy(gameObject);
 		}
