@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] float inventoryScaleMultiplier = 1.5f;
 
 	[Title("References")]
+	[SerializeField] TextMeshProUGUI moneyText;
 	[SerializeField] RectTransform inventoryIcon;
 	[SerializeField] RectTransform lightIcon;
 	[SerializeField] Image inventoryProgressBar;
@@ -34,12 +36,14 @@ public class UIManager : MonoBehaviour
 
 		inventoryMat.SetFloat("_Right", 1f);
 
+		GameManager.instance.OnMoneyUpdate += UpdateMoney;
 		GameManager.instance.OnAddItem += AddItem;
 		GameManager.instance.OnLightUpdate += UpdateLight;
 	}
 
 	private void OnDisable()
 	{
+		GameManager.instance.OnMoneyUpdate -= UpdateMoney;
 		GameManager.instance.OnAddItem -= AddItem;
 		GameManager.instance.OnLightUpdate -= UpdateLight;
 	}
@@ -51,6 +55,11 @@ public class UIManager : MonoBehaviour
 			inventoryIcon.localScale = Vector3.one * Mathf.Lerp(1f, inventoryScaleMultiplier, inventoryScaleElapsedTime / inventoryScaleDuration);
 			inventoryScaleElapsedTime -= Time.deltaTime;
 		}
+	}
+
+	void UpdateMoney(int amount)
+	{
+		moneyText.text = $"<sprite index=0> {amount}";
 	}
 
 	void UpdateLight(float progress)

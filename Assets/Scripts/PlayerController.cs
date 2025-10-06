@@ -7,9 +7,9 @@ public class PlayerController : MonoBehaviour
 	public static PlayerController instance;
 
 	[Title("Properties")]
-	[SerializeField] float moveSpeed;
-	[SerializeField] float miningSpeed = 1f;
-	[SerializeField] int miningStrength = 1;
+	public float moveSpeed;
+	public float miningSpeed = 1f;
+	public int miningStrength = 1;
 	[SerializeField] float fogRadius = 5f;
 
 	[Title("References")]

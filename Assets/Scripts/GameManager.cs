@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,7 +21,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField] SO_Upgrades SO_bagCapacity;
 
 	[Title("Inventory")]
-	[SerializeField] int capacity;
+	public int capacity;
+	public int money = 0;
 
 	[Title("Light")]
 	[SerializeField] PlayerLightManager lightManager;
@@ -30,22 +32,26 @@ public class GameManager : MonoBehaviour
 	public Action<float> OnAddItem;
 	public Action<float> OnLightUpdate;
 
-	Upgrades upgrades;
+	public Action<int> OnMoneyUpdate;
+
+	DataSaved dataSaved;
 
 	int currentWeight = 0;
 	Dictionary<string, int> inventory = new();
 
 	float currentLightState = 0f;
+	bool counterStarted = false;
 
 	bool isSceneLoading = false;
 
-	private void OnEnable()
+	private async void OnEnable()
 	{
 		instance = this;
 
 		LoadData();
+		await ApplyData();
 
-		currentLightState = lightDuration;
+		StartCounter();
 	}
 
 	private void Update()
@@ -53,12 +59,84 @@ public class GameManager : MonoBehaviour
 		UpdateLight();
 	}
 
+	void StartCounter()
+	{
+		counterStarted = true;
+		currentLightState = lightDuration;
+	}
+
+	#region UPGRADES
+
+	public bool CanUpgrade(DataSaved.Type type)
+	{
+		switch (type)
+		{
+			case DataSaved.Type.PickaxeStrength:
+				return dataSaved.pickaxeStrengthLevel < SO_pickaxeStrength.maxLevel;
+			case DataSaved.Type.PickaxeSpeed:
+				return dataSaved.pickaxeSpeedLevel < SO_pickaxeSpeed.maxLevel;
+			case DataSaved.Type.MoveSpeed:
+				return dataSaved.moveSpeedLevel < SO_moveSpeed.maxLevel;
+			case DataSaved.Type.LightDuration:
+				return dataSaved.lightDurationLevel < SO_lightDuration.maxLevel;
+			case DataSaved.Type.BagCapacity:
+				return dataSaved.bagCapacityLevel < SO_bagCapacity.maxLevel;
+		}
+		return false;
+	}
+
+	public void UpgradeData(DataSaved.Type type)
+	{
+		switch (type)
+		{
+			case DataSaved.Type.PickaxeStrength:
+				dataSaved.pickaxeStrengthLevel++;
+				break;
+			case DataSaved.Type.PickaxeSpeed:
+				dataSaved.pickaxeSpeedLevel++;
+				break;
+			case DataSaved.Type.MoveSpeed:
+				dataSaved.moveSpeedLevel++;
+				break;
+			case DataSaved.Type.LightDuration:
+				dataSaved.lightDurationLevel++;
+				break;
+			case DataSaved.Type.BagCapacity:
+				dataSaved.bagCapacityLevel++;
+				break;
+		}
+
+		ApplyData();
+		SaveData();
+	}
+
+	async Task ApplyData()
+	{
+		while (UIManager.instance == null)
+			await Task.Yield();
+
+		money = dataSaved.money;
+		OnMoneyUpdate?.Invoke(money);
+
+		capacity = (int)GetValueFromType(DataSaved.Type.BagCapacity);
+		lightDuration = GetValueFromType(DataSaved.Type.LightDuration) + 1f; // One extra seconds because I'm cool
+		
+		while (PlayerController.instance == null)
+			await Task.Yield();
+
+		PlayerController.instance.moveSpeed = GetValueFromType(DataSaved.Type.MoveSpeed);
+		PlayerController.instance.miningSpeed = GetValueFromType(DataSaved.Type.PickaxeSpeed);
+		PlayerController.instance.miningStrength = (int)GetValueFromType(DataSaved.Type.PickaxeStrength);
+	}
+
+	#endregion
+
 	#region SAVE_SYSTEM
 
 	public void SaveData()
 	{
 		string path = Path.Combine(Application.persistentDataPath, SAVE_NAME);
-		string json = JsonUtility.ToJson(upgrades, true);
+		string json = JsonUtility.ToJson(dataSaved, true);
 		Debug.Log("Save JSON : " + json + " at " + path);
 		File.WriteAllText(path, json);
 	}
@@ -70,124 +148,124 @@ public class GameManager : MonoBehaviour
 		if (!File.Exists(path))
 		{
 			Debug.Log("Created file !");
-			upgrades = new();
+			dataSaved = new();
 			SaveData();
 		}
 
 		string json = File.ReadAllText(path);
 		Debug.Log("Load JSON : " + json + " from " + path);
-		upgrades = JsonUtility.FromJson<Upgrades>(json);
+		dataSaved = JsonUtility.FromJson<DataSaved>(json);
 	}
 
-	public int GetCostFromType(Upgrades.Type type)
+	public int GetCostFromType(DataSaved.Type type)
 	{
 		SO_Upgrades upgradeSO = null;
 		int level = 0;
 
 		switch (type)
 		{
-			case Upgrades.Type.PickaxeStrength:
+			case DataSaved.Type.PickaxeStrength:
 				upgradeSO = SO_pickaxeStrength;
-				level = upgrades.pickaxeStrengthLevel;
+				level = dataSaved.pickaxeStrengthLevel;
 				break;
-			case Upgrades.Type.PickaxeSpeed:
+			case DataSaved.Type.PickaxeSpeed:
 				upgradeSO = SO_pickaxeSpeed;
-				level = upgrades.pickaxeSpeedLevel;
+				level = dataSaved.pickaxeSpeedLevel;
 				break;
-			case Upgrades.Type.MoveSpeed:
+			case DataSaved.Type.MoveSpeed:
 				upgradeSO = SO_moveSpeed;
-				level = upgrades.moveSpeedLevel;
+				level = dataSaved.moveSpeedLevel;
 				break;
-			case Upgrades.Type.LightDuration:
+			case DataSaved.Type.LightDuration:
 				upgradeSO = SO_lightDuration;
-				level = upgrades.lightDurationLevel;
+				level = dataSaved.lightDurationLevel;
 				break;
-			case Upgrades.Type.BagCapacity:
+			case DataSaved.Type.BagCapacity:
 				upgradeSO = SO_bagCapacity;
-				level = upgrades.bagCapacityLevel;
+				level = dataSaved.bagCapacityLevel;
 				break;
 		}
 
 		return upgradeSO.costPerLevel * level;
 	}
 
-	public float GetValueFromType(Upgrades.Type type)
+	public float GetValueFromType(DataSaved.Type type)
 	{
 		SO_Upgrades upgradeSO = null;
 		int level = 0;
 
 		switch (type)
 		{
-			case Upgrades.Type.PickaxeStrength:
+			case DataSaved.Type.PickaxeStrength:
 				upgradeSO = SO_pickaxeStrength;
-				level = upgrades.pickaxeStrengthLevel;
+				level = dataSaved.pickaxeStrengthLevel;
 				break;
-			case Upgrades.Type.PickaxeSpeed:
+			case DataSaved.Type.PickaxeSpeed:
 				upgradeSO = SO_pickaxeSpeed;
-				level = upgrades.pickaxeSpeedLevel;
+				level = dataSaved.pickaxeSpeedLevel;
 				break;
-			case Upgrades.Type.MoveSpeed:
+			case DataSaved.Type.MoveSpeed:
 				upgradeSO = SO_moveSpeed;
-				level = upgrades.moveSpeedLevel;
+				level = dataSaved.moveSpeedLevel;
 				break;
-			case Upgrades.Type.LightDuration:
+			case DataSaved.Type.LightDuration:
 				upgradeSO = SO_lightDuration;
-				level = upgrades.lightDurationLevel;
+				level = dataSaved.lightDurationLevel;
 				break;
-			case Upgrades.Type.BagCapacity:
+			case DataSaved.Type.BagCapacity:
 				upgradeSO = SO_bagCapacity;
-				level = upgrades.bagCapacityLevel;
+				level = dataSaved.bagCapacityLevel;
 				break;
 		}
 
 		return upgradeSO.baseValue + upgradeSO.valuePerLevel * (level - 1);
 	}
 
-	public int GetLevelFromType(Upgrades.Type type)
+	public int GetLevelFromType(DataSaved.Type type)
 	{
 		int level = 0;
 
 		switch (type)
 		{
-			case Upgrades.Type.PickaxeStrength:
-				level = upgrades.pickaxeStrengthLevel;
+			case DataSaved.Type.PickaxeStrength:
+				level = dataSaved.pickaxeStrengthLevel;
 				break;
-			case Upgrades.Type.PickaxeSpeed:
-				level = upgrades.pickaxeSpeedLevel;
+			case DataSaved.Type.PickaxeSpeed:
+				level = dataSaved.pickaxeSpeedLevel;
 				break;
-			case Upgrades.Type.MoveSpeed:
-				level = upgrades.moveSpeedLevel;
+			case DataSaved.Type.MoveSpeed:
+				level = dataSaved.moveSpeedLevel;
 				break;
-			case Upgrades.Type.LightDuration:
-				level = upgrades.lightDurationLevel;
+			case DataSaved.Type.LightDuration:
+				level = dataSaved.lightDurationLevel;
 				break;
-			case Upgrades.Type.BagCapacity:
-				level = upgrades.bagCapacityLevel;
+			case DataSaved.Type.BagCapacity:
+				level = dataSaved.bagCapacityLevel;
 				break;
 		}
 
 		return level;
 	}
 
-	public float GetUpgradeFromType(Upgrades.Type type)
+	public float GetUpgradeFromType(DataSaved.Type type)
 	{
 		SO_Upgrades upgradeSO = null;
 
 		switch (type)
 		{
-			case Upgrades.Type.PickaxeStrength:
+			case DataSaved.Type.PickaxeStrength:
 				upgradeSO = SO_pickaxeStrength;
 				break;
-			case Upgrades.Type.PickaxeSpeed:
+			case DataSaved.Type.PickaxeSpeed:
 				upgradeSO = SO_pickaxeSpeed;
 				break;
-			case Upgrades.Type.MoveSpeed:
+			case DataSaved.Type.MoveSpeed:
 				upgradeSO = SO_moveSpeed;
 				break;
-			case Upgrades.Type.LightDuration:
+			case DataSaved.Type.LightDuration:
 				upgradeSO = SO_lightDuration;
 				break;
-			case Upgrades.Type.BagCapacity:
+			case DataSaved.Type.BagCapacity:
 				upgradeSO = SO_bagCapacity;
 				break;
 		}
@@ -196,8 +274,10 @@ public class GameManager : MonoBehaviour
 	}
 
 	[Serializable]
-	public class Upgrades
+	public class DataSaved
 	{
+		public int money = 0;
+
 		public int pickaxeStrengthLevel = 1;
 		public int pickaxeSpeedLevel = 1;
 		public int moveSpeedLevel = 1;
@@ -219,7 +299,7 @@ public class GameManager : MonoBehaviour
 	#region LIGHT
 	void UpdateLight()
 	{
-		if (lightManager == null)
+		if (!counterStarted || lightManager == null)
 			return;
 
 		currentLightState -= Time.deltaTime;
@@ -232,7 +312,28 @@ public class GameManager : MonoBehaviour
 
 	#endregion
 
-	#region CAPACITY
+	#region INVENTORY
+	
+	public bool CanAfford(int cost)
+	{
+		return money >= cost;
+	}
+
+	public void SpendMoney(int amount)
+	{
+		money -= amount;
+		dataSaved.money = money;
+		SaveData();
+		OnMoneyUpdate?.Invoke(money);
+	}
+
+	public void AddMoney(int amount)
+	{
+		money += amount;
+		dataSaved.money = money;
+		SaveData();
+		OnMoneyUpdate?.Invoke(money);
+	}
 
 	public bool HasCapacityFor(int space)
 	{
@@ -279,8 +380,9 @@ public class GameManager : MonoBehaviour
 	IEnumerator LoadSceneAsync(string name)
 	{
 		isSceneLoading = true;
+		PlayerController.instance.canInput = false;
 
-		AsyncOperation loadingSceneAO = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+		AsyncOperation loadingSceneAO = SceneManager.LoadSceneAsync(name);
 		loadingSceneAO.allowSceneActivation = false;
 
 
@@ -290,14 +392,10 @@ public class GameManager : MonoBehaviour
 			yield return null;
 		}
 
-
-		Scene sceneToLoad = SceneManager.GetSceneByPath(name);
-		Scene currentScene = SceneManager.GetActiveScene();
-		loadingSceneAO.allowSceneActivation = true;
-		SceneManager.UnloadSceneAsync(currentScene);
-		SceneManager.SetActiveScene(sceneToLoad);
-
+		PlayerController.instance.canInput = true;
 		isSceneLoading = false;
+
+		loadingSceneAO.allowSceneActivation = true;
 	}
 
 	#endregion
