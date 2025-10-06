@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnterMine : MonoBehaviour
+public class ExitMine : MonoBehaviour
 {
 	[SerializeField] string sceneToLoad;
 

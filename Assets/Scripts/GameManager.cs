@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField, Tooltip("Duration in seconds")] float lightDuration = 60f;
 	[SerializeField] AnimationCurve lightShakyness;
 
-	public Action<float> OnAddItem;
+	public Action<float> OnUpdateItem;
 	public Action<float> OnLightUpdate;
 
 	public Action<int> OnMoneyUpdate;
@@ -61,21 +61,14 @@ public class GameManager : MonoBehaviour
 		ApplyData();
 		LoadInventory();
 
+		currentWeight = GetCurrentWeight();
+		OnUpdateItem?.Invoke((float)currentWeight / capacity);
+
 		StartCounter();
 	}
 
 	private void Update()
 	{
-		if (Input.GetKeyUp(KeyCode.K))
-		{
-			LoadScene("Assets/Scenes/ShopScene.unity");
-		}
-
-		if (Input.GetKeyUp(KeyCode.J))
-		{
-			SaveInventory();
-		}
-
 		UpdateLight();
 	}
 
@@ -436,7 +429,19 @@ public class GameManager : MonoBehaviour
 
 		currentWeight += weight;
 
-		OnAddItem?.Invoke((float)currentWeight / capacity);
+		OnUpdateItem?.Invoke((float)currentWeight / capacity);
+	}
+
+	public int GetCurrentWeight()
+	{
+		InventoryWrapper inv = new(inventory);
+
+		int totalWeight = 0;
+
+		for (int i = 0; i < inv.slots.Length; i++)
+			totalWeight += inv.slots[i].value * GetSOByName(inv.slots[i].key).weight;
+
+		return totalWeight;
 	}
 
 	public int GetTotalValueOfInventory()
@@ -454,12 +459,14 @@ public class GameManager : MonoBehaviour
 	public void SellAll()
 	{
 		money += GetTotalValueOfInventory();
+		dataSaved.money = money;
+		OnMoneyUpdate?.Invoke(money);
 
 		SaveData();
 
-		OnMoneyUpdate?.Invoke(money);
 		ClearInventory();
-
+		currentWeight = 0;
+		OnUpdateItem?.Invoke((float)currentWeight / capacity);
 	}
 
 	public SO_Ore GetSOByName(string name)
@@ -498,6 +505,9 @@ public class GameManager : MonoBehaviour
 			elapsedTime += Time.deltaTime;
 			yield return null;
 		}
+
+		ClearInventory();
+		LoadScene("Assets/Scenes/ShopScene.unity");
 	}
 
 	IEnumerator LoadSceneAsync(string name)

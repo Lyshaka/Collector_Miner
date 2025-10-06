@@ -37,14 +37,14 @@ public class UIManager : MonoBehaviour
 		inventoryMat.SetFloat("_Right", 1f);
 
 		GameManager.instance.OnMoneyUpdate += UpdateMoney;
-		GameManager.instance.OnAddItem += AddItem;
+		GameManager.instance.OnUpdateItem += UpdateItem;
 		GameManager.instance.OnLightUpdate += UpdateLight;
 	}
 
 	private void OnDisable()
 	{
 		GameManager.instance.OnMoneyUpdate -= UpdateMoney;
-		GameManager.instance.OnAddItem -= AddItem;
+		GameManager.instance.OnUpdateItem -= UpdateItem;
 		GameManager.instance.OnLightUpdate -= UpdateLight;
 	}
 
@@ -67,7 +67,7 @@ public class UIManager : MonoBehaviour
 		lightMat.SetFloat("_Left", 1f - progress);
 	}
 
-	void AddItem(float progress)
+	void UpdateItem(float progress)
 	{
 		inventoryScaleElapsedTime = inventoryScaleDuration;
 		inventoryMat.SetFloat("_Right", 1f - progress);

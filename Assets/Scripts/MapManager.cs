@@ -81,8 +81,11 @@ public class MapManager : MonoBehaviour
 
 	MinedTile currentlyMinedTile = null;
 
+	BoundsInt startBounds;
+
 	[Title("Debug")]
-	[SerializeField] int seed = 0;
+	[SerializeField] bool randomSeed = true;
+	[SerializeField, DisableIf("@randomSeed")] int seed = 0;
 	[SerializeField, ReadOnly] Vector2Int corridorsSeed;
 	[SerializeField, ReadOnly] Vector2Int caveSeed;
 
@@ -97,20 +100,29 @@ public class MapManager : MonoBehaviour
 
 		breakingTileRenderer.enabled = false;
 
-		//seed = Random.Range(int.MinValue, int.MaxValue);
+		if (randomSeed)
+			seed = Random.Range(int.MinValue, int.MaxValue);
 		Random.InitState(seed);
 
 		corridorsSeed = RandomRange(-100_000, 100_000);
 		caveSeed = RandomRange(-100_000, 100_000);
 
 		CreateBaseTiles();
+
+		// Save tilemap as is
+		layoutTilemap.CompressBounds();
+		startBounds = layoutTilemap.cellBounds;
+		TileBase[] startTiles = layoutTilemap.GetTilesBlock(startBounds);
+
+		ComputeChunkWithinDistance();
+		LoadNewChunks();
+
+		// Load tilemap and replace existing blocks
+		layoutTilemap.SetTilesBlock(startBounds, startTiles);
 	}
 
 	private void Update()
 	{
-		//if (!PlayerController.instance.isMining)
-		//	breakingTileRenderer.enabled = false;
-
 		_playerPos = playerTransform.position;
 		_playerTilePos = GetTilePos(groundTilemap, _playerPos);
 		_playerChunkPos = GetChunkPos(_playerTilePos);
@@ -124,6 +136,10 @@ public class MapManager : MonoBehaviour
 	{
 		// If there is no tile, nothing happen
 		if (!layoutTilemap.HasTile((Vector3Int)tilePos))
+			return;
+
+		// If it's a tile from the start area nothing happen
+		if (startBounds.Contains((Vector3Int)tilePos))
 			return;
 
 		Vector2Int chunkPos = GetChunkPos(tilePos);
