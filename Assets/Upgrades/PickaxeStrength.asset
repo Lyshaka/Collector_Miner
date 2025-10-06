@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_Upgrades
   upgradeName: Pickaxe Strength
   costPerLevel: 100
-  baseValue: 2
-  valuePerLevel: 2
+  baseValue: 8
+  valuePerLevel: 4
   maxLevel: 10
+  type: 0

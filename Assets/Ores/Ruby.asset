@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_Ore
   oreName: Ruby
   color: {r: 0.79622644, g: 0.022534575, b: 0.022534575, a: 1}
-  maxVeinPerChunk: 1
-  veinSize: {x: 1, y: 1}
-  hardness: 1
+  maxVeinPerChunk: 3
+  veinSize: {x: 3, y: 6}
+  price: 50
+  weight: 9
+  health: 96
+  hardness: 36
   poorQuantity: 1
   mediumQuantity: 2
   richQuantity: 3

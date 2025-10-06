@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_Ore
   oreName: Iron
   color: {r: 0.5320754, g: 0.48286548, b: 0.41662508, a: 1}
-  maxVeinPerChunk: 1
-  veinSize: {x: 1, y: 1}
-  hardness: 1
+  maxVeinPerChunk: 8
+  veinSize: {x: 4, y: 10}
+  price: 8
+  weight: 3
+  health: 24
+  hardness: 12
   poorQuantity: 1
   mediumQuantity: 2
   richQuantity: 3
