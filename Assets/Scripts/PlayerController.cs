@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -47,11 +48,21 @@ public class PlayerController : MonoBehaviour
 		CarveFog();
 	}
 
+	public void StopMove()
+	{
+		rb.linearVelocity = Vector2.zero;
+	}
+
+	public void Knockback()
+	{
+		StartCoroutine(BlockInputForSeconds(0.5f));
+		rb.AddForce(-lookDirection * 5f, ForceMode2D.Impulse);
+	}
+
 	void HandleMove()
 	{
 		if (!canInput)
 		{
-			rb.linearVelocity = Vector2.zero;
 			animator.SetBool("Moving", false);
 			return;
 		}
@@ -130,6 +141,15 @@ public class PlayerController : MonoBehaviour
 			return dir.y > 0 ? Vector2.up : Vector2.down;
 		}
 	}
+
+	IEnumerator BlockInputForSeconds(float time)
+	{
+		canInput = false;
+		StopMove();
+		yield return new WaitForSeconds(time);
+		canInput = true;
+	}
+
 
 	private void OnDrawGizmos()
 	{

@@ -45,6 +45,8 @@ public class Shopkeeper : MonoBehaviour
 		UpdateShop();
 
 		shopCanvas.SetActive(true);
+
+		PlayerController.instance.StopMove();
 		PlayerController.instance.canInput = false;
 	}
 

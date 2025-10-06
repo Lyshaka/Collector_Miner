@@ -140,7 +140,10 @@ public class MapManager : MonoBehaviour
 
 		// If it's a tile from the start area nothing happen
 		if (startBounds.Contains((Vector3Int)tilePos))
+		{
+			PlayerController.instance.Knockback();
 			return;
+		}
 
 		Vector2Int chunkPos = GetChunkPos(tilePos);
 		Vector2Int localTilePos = GetChunkTilePos(tilePos);
@@ -173,6 +176,13 @@ public class MapManager : MonoBehaviour
 			{
 				currentlyMinedTile.ResetHealth();
 				currentlyMinedTile = new(tilePos, tileData);
+			}
+
+			// If we don't have enough strength, knockack and nope
+			if (strength < currentlyMinedTile.tileData.oreSO.hardness)
+			{
+				PlayerController.instance.Knockback();
+				return;
 			}
 
 			currentlyMinedTile.health -= strength;

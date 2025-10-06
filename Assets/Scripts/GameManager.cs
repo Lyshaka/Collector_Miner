@@ -494,6 +494,7 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator KillSequence()
 	{
+		PlayerController.instance.StopMove();
 		PlayerController.instance.canInput = false;
 
 		float elapsedTime = 0f;
@@ -513,6 +514,8 @@ public class GameManager : MonoBehaviour
 	IEnumerator LoadSceneAsync(string name)
 	{
 		isSceneLoading = true;
+
+		PlayerController.instance.StopMove();
 		PlayerController.instance.canInput = false;
 
 		SaveInventory();
