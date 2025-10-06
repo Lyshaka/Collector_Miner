@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] Tilemap layoutTilemap;
 
 	bool _isMining = false;
-	Vector2 lookDirection = Vector2.down;
+	public Vector2 lookDirection = Vector2.down;
 
 	public bool canInput = true;
 

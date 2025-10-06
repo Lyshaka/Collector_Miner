@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -44,6 +45,7 @@ public class MapManager : MonoBehaviour
 	[SerializeField] GameObject droppedOrePrefab;
 	[SerializeField] Animator breakingTileAnimator;
 	[SerializeField] SpriteRenderer breakingTileRenderer;
+	[SerializeField] ParticleSystem bouncePS;
 
 	/// <summary>
 	/// Position of the player in the world
@@ -130,6 +132,11 @@ public class MapManager : MonoBehaviour
 
 		ComputeChunkWithinDistance();
 		LoadNewChunks();
+
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			bouncePS.Play();
+		}
 	}
 
 	public void MineTile(Vector2Int tilePos, int strength)
@@ -146,6 +153,7 @@ public class MapManager : MonoBehaviour
 		{
 			PlayerController.instance.PlaySFXBounce();
 			PlayerController.instance.Knockback();
+			PlayParticleAtPos(playerPos + PlayerController.instance.lookDirection * 0.4f);
 			return;
 		}
 
@@ -187,6 +195,7 @@ public class MapManager : MonoBehaviour
 			{
 				PlayerController.instance.PlaySFXBounce();
 				PlayerController.instance.Knockback();
+				PlayParticleAtPos(playerPos + PlayerController.instance.lookDirection * 0.4f);
 				return;
 			}
 
@@ -208,7 +217,6 @@ public class MapManager : MonoBehaviour
 					GameObject obj = Instantiate(droppedOrePrefab, worldPos + (Vector3)RandomRange(-0.3f, 0.3f), Quaternion.identity);
 					obj.GetComponent<DroppedOre>().Init(tileData.oreSO);
 				}
-
 
 				DestroyTile(tilePos);
 			}
@@ -403,6 +411,11 @@ public class MapManager : MonoBehaviour
 
 	#endregion
 
+	public void PlayParticleAtPos(Vector2 pos)
+	{
+		bouncePS.transform.position = pos;
+		bouncePS.Play();
+	}
 
 	public static Vector2 RandomRange(float minInclusive, float maxInclusive)
 	{
