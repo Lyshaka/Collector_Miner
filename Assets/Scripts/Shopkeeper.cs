@@ -8,6 +8,9 @@ public class Shopkeeper : MonoBehaviour
 {
 	[Title("References")]
 	[SerializeField] GameObject shopCanvas;
+	[SerializeField] Transform inventoryTransform;
+	[SerializeField] GameObject inventorySlotPrefab;
+	[SerializeField] TextMeshProUGUI totalTMP;
 
 	[Title("Upgrades References")]
 	[SerializeField] Color defaultTextColor = Color.white;
@@ -26,8 +29,13 @@ public class Shopkeeper : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		Debug.Log("Shopkeeper");
 		OpenShop();
+	}
+
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+			CloseShop();
 	}
 
 	void OpenShop()
@@ -40,6 +48,19 @@ public class Shopkeeper : MonoBehaviour
 		PlayerController.instance.canInput = false;
 	}
 
+	public void CloseShop()
+	{
+		shopCanvas.SetActive(false);
+		PlayerController.instance.canInput = true;
+	}
+
+	public void Sell()
+	{
+		GameManager.instance.SellAll();
+
+		UpdateShop();
+	}
+
 	void UpdateShop()
 	{
 		pickaxeStrength.SetValues(defaultTextColor, cantAffordColor, maxColor, UpgradeButton);
@@ -47,6 +68,20 @@ public class Shopkeeper : MonoBehaviour
 		moveSpeed.SetValues(defaultTextColor, cantAffordColor, maxColor, UpgradeButton);
 		lightDuration.SetValues(defaultTextColor, cantAffordColor, maxColor, UpgradeButton);
 		bagCapacity.SetValues(defaultTextColor, cantAffordColor, maxColor, UpgradeButton);
+
+		GameManager.InventoryWrapper inventoryData = GameManager.instance.GetInventoryData();
+
+		for (int i = inventoryTransform.childCount - 1; i >= 0; i--)
+			Destroy(inventoryTransform.GetChild(i).gameObject);
+
+		for (int i = 0; i < inventoryData.slots.Length; i++)
+		{
+			GameObject obj = Instantiate(inventorySlotPrefab, inventoryTransform);
+			SO_Ore oreSO = GameManager.instance.GetSOByName(inventoryData.slots[i].key);
+			obj.GetComponent<InventorySlot>().SetOre(oreSO, inventoryData.slots[i].value);
+		}
+
+		totalTMP.text = $"+{GameManager.instance.GetTotalValueOfInventory()} <sprite index=0>";
 	}
 
 	public void UpgradeButton(GameManager.DataSaved.Type type)
@@ -117,10 +152,7 @@ public class Shopkeeper : MonoBehaviour
 			}
 
 			for (int i = levelVLG.transform.childCount - 1; i >= 1; i--)
-			{
-				Debug.Log("Destroy children !!!!");
 				Destroy(levelVLG.transform.GetChild(i).gameObject);
-			}
 			GameObject levelObject = levelVLG.transform.GetChild(0).gameObject;
 			for (int i = 1; i < level; i++)
 				Instantiate(levelObject, levelVLG.transform);

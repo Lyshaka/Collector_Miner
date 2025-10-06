@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
 	public static GameManager instance;
 
 	const string SAVE_NAME = "save.json";
+	const string INVENTORY_NAME = "temp.json";
 
 	[Title("Upgrades")]
 	[SerializeField] SO_Upgrades SO_pickaxeStrength;
@@ -19,6 +21,9 @@ public class GameManager : MonoBehaviour
 	[SerializeField] SO_Upgrades SO_moveSpeed;
 	[SerializeField] SO_Upgrades SO_lightDuration;
 	[SerializeField] SO_Upgrades SO_bagCapacity;
+
+	[Title("Ores SO")]
+	[SerializeField] SO_Ore[] oreSOs;
 
 	[Title("Inventory")]
 	public int capacity;
@@ -49,13 +54,28 @@ public class GameManager : MonoBehaviour
 		instance = this;
 
 		LoadData();
-		await ApplyData();
+
+		while (UIManager.instance == null || PlayerController.instance == null)
+			await Task.Yield();
+
+		ApplyData();
+		LoadInventory();
 
 		StartCounter();
 	}
 
 	private void Update()
 	{
+		if (Input.GetKeyUp(KeyCode.K))
+		{
+			LoadScene("Assets/Scenes/ShopScene.unity");
+		}
+
+		if (Input.GetKeyUp(KeyCode.J))
+		{
+			SaveInventory();
+		}
+
 		UpdateLight();
 	}
 
@@ -110,19 +130,13 @@ public class GameManager : MonoBehaviour
 		SaveData();
 	}
 
-	async Task ApplyData()
+	void ApplyData()
 	{
-		while (UIManager.instance == null)
-			await Task.Yield();
-
 		money = dataSaved.money;
 		OnMoneyUpdate?.Invoke(money);
 
 		capacity = (int)GetValueFromType(DataSaved.Type.BagCapacity);
 		lightDuration = GetValueFromType(DataSaved.Type.LightDuration) + 1f; // One extra seconds because I'm cool
-		
-		while (PlayerController.instance == null)
-			await Task.Yield();
 
 		PlayerController.instance.moveSpeed = GetValueFromType(DataSaved.Type.MoveSpeed);
 		PlayerController.instance.miningSpeed = GetValueFromType(DataSaved.Type.PickaxeSpeed);
@@ -133,11 +147,46 @@ public class GameManager : MonoBehaviour
 
 	#region SAVE_SYSTEM
 
+	void SaveInventory()
+	{
+		InventoryWrapper inv = new(inventory); 
+		string path = Path.Combine(Application.persistentDataPath, INVENTORY_NAME);
+		string json = JsonUtility.ToJson(inv, true);
+		File.WriteAllText(path, json);
+	}
+
+	void LoadInventory()
+	{
+		string path = Path.Combine(Application.persistentDataPath, INVENTORY_NAME);
+
+		if (!File.Exists(path))
+		{
+			inventory = new();
+		}
+		else
+		{
+			string json = File.ReadAllText(path);
+			InventoryWrapper inv = JsonUtility.FromJson<InventoryWrapper>(json);
+			inventory = inv.GetValues();
+			File.Delete(path);
+		}
+	}
+
+	public void ClearInventory()
+	{
+		inventory = new();
+	}
+
+	public InventoryWrapper GetInventoryData()
+	{
+		return new(inventory);
+	}
+
 	public void SaveData()
 	{
 		string path = Path.Combine(Application.persistentDataPath, SAVE_NAME);
 		string json = JsonUtility.ToJson(dataSaved, true);
-		Debug.Log("Save JSON : " + json + " at " + path);
+		//Debug.Log("Save JSON : " + json + " at " + path);
 		File.WriteAllText(path, json);
 	}
 
@@ -147,13 +196,13 @@ public class GameManager : MonoBehaviour
 
 		if (!File.Exists(path))
 		{
-			Debug.Log("Created file !");
+			//Debug.Log("Created file !");
 			dataSaved = new();
 			SaveData();
 		}
 
 		string json = File.ReadAllText(path);
-		Debug.Log("Load JSON : " + json + " from " + path);
+		//Debug.Log("Load JSON : " + json + " from " + path);
 		dataSaved = JsonUtility.FromJson<DataSaved>(json);
 	}
 
@@ -294,6 +343,44 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	[Serializable]
+	public class InventoryWrapper
+	{
+		public Slot[] slots;
+
+		public InventoryWrapper(Dictionary<string, int> inventory)
+		{
+			SetValues(inventory);
+		}
+
+		public void SetValues(Dictionary<string, int> inventory)
+		{
+			slots = new Slot[inventory.Count];
+			for (int i = 0; i < inventory.Count; i++)
+			{
+				slots[i].key = inventory.ElementAt(i).Key;
+				slots[i].value = inventory.ElementAt(i).Value;
+			}
+		}
+
+		public Dictionary<string, int> GetValues()
+		{
+			Dictionary<string, int> inventory = new();
+
+			for (int i = 0; i < slots.Length; i++)
+				inventory.Add(slots[i].key, slots[i].value);
+
+			return inventory;
+		}
+
+		[Serializable]
+		public struct Slot
+		{
+			public string key;
+			public int value;
+		}
+	}
+
 	#endregion
 
 	#region LIGHT
@@ -352,6 +439,42 @@ public class GameManager : MonoBehaviour
 		OnAddItem?.Invoke((float)currentWeight / capacity);
 	}
 
+	public int GetTotalValueOfInventory()
+	{
+		InventoryWrapper inv = new(inventory);
+
+		int total = 0;
+
+		for (int i = 0; i < inv.slots.Length; i++)
+			total += inv.slots[i].value * GetSOByName(inv.slots[i].key).price;
+
+		return total;
+	}
+
+	public void SellAll()
+	{
+		money += GetTotalValueOfInventory();
+
+		SaveData();
+
+		OnMoneyUpdate?.Invoke(money);
+		ClearInventory();
+
+	}
+
+	public SO_Ore GetSOByName(string name)
+	{
+		SO_Ore so = null;
+
+		for (int i = 0; i < oreSOs.Length; i++)
+		{
+			if (oreSOs[i].oreName == name)
+				return oreSOs[i];
+		}
+
+		return so;
+	}
+
 	#endregion
 
 	#region SCENE_MANAGEMENT
@@ -382,13 +505,15 @@ public class GameManager : MonoBehaviour
 		isSceneLoading = true;
 		PlayerController.instance.canInput = false;
 
+		SaveInventory();
+
 		AsyncOperation loadingSceneAO = SceneManager.LoadSceneAsync(name);
 		loadingSceneAO.allowSceneActivation = false;
 
 
 		while (loadingSceneAO.progress < 0.9f)
 		{
-			Debug.Log("Scene Loading");
+			//Debug.Log("Scene Loading");
 			yield return null;
 		}
 
